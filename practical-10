@@ -1,0 +1,57 @@
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int parent[5];
+
+int find(int x) {
+    if (parent[x] == x)
+        return x;
+    return parent[x] = find(parent[x]);
+}
+
+int main() {
+    int n = 5;
+
+    vector<pair<int, pair<int, int>>> edges = {
+        {2, {0, 1}},
+        {6, {0, 3}},
+        {3, {1, 2}},
+        {8, {1, 3}},
+        {5, {1, 4}},
+        {7, {2, 4}},
+        {9, {3, 4}}
+    };
+
+    for (int i = 0; i < n; i++)
+        parent[i] = i;
+
+    sort(edges.begin(), edges.end());
+
+    int total = 0;
+
+    cout << "Kruskal's Minimum Spanning Tree\n";
+
+    for (auto edge : edges) {
+        int w = edge.first;
+        int u = edge.second.first;
+        int v = edge.second.second;
+
+        int a = find(u);
+        int b = find(v);
+
+        if (a != b) {
+            parent[a] = b;
+            cout << u << " - " << v
+                 << " : " << w << endl;
+            total += w;
+        }
+    }
+
+    cout << "MST Cost = " << total;
+
+    return 0;
+}
